@@ -10,6 +10,9 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
+
 
 # from models import Person
 
@@ -42,6 +45,10 @@ app.register_blueprint(api, url_prefix='/api')
 
 # Handle/serialize errors like a JSON object
 
+bcrypt = Bcrypt(app)
+# Setup the Flask-JWT-Extended extension
+app.config["JWT_SECRET_KEY"] = os.getenv("FLASK_JWT_SECRET_KEY")  # Change this!
+jwt = JWTManager(app)
 
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
